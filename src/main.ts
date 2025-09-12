@@ -18,12 +18,17 @@ async function bootstrap() {
     }),
   );
 
-  app.connectMicroservice<MicroserviceOptions>({
-    transport: Transport.NATS,
-    options: {
-      servers: envs.NATS_SERVERS,
+  app.connectMicroservice<MicroserviceOptions>(
+    {
+      transport: Transport.NATS,
+      options: {
+        servers: envs.NATS_SERVERS,
+      },
     },
-  });
+    {
+      inheritAppConfig: true, // this will allow validate dto PaymentSessionDto witch is not using http
+    },
+  );
 
   await app.startAllMicroservices();
   await app.listen(envs.PORT ?? 3000);
